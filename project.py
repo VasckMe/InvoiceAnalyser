@@ -10,3 +10,24 @@ def wprowadz_dane_faktury():
 
 
 
+# 
+def zapisz_faktury(kwota, data, waluta):
+    faktura = {
+        "Kwota": kwota,
+        "Data_faktury": data,
+        "Waluta": waluta
+    }
+    
+    with open("faktury.txt", "a") as plik:
+        json.dump(faktura, plik)
+        plik.write('\n')
+    
+    return faktura
+
+
+
+
+    
+
+
+
