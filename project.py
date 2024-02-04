@@ -27,3 +27,15 @@ def zapisz_faktury(kwota, data, waluta):
     with open("faktury.txt", "a") as plik:
         json.dump(faktura, plik)
         plik.write('\n')
+
+# Zapis danych platnosci w plik platnosci.txt
+def zapisz_platnosc(kwota, data, waluta):
+    faktura = {
+        "Kwota": kwota,
+        "Data_platnosci": data,
+        "Waluta": waluta
+    }
+    
+    with open("platnosci.txt", "a") as plik:
+        json.dump(faktura, plik)
+        plik.write('\n')
