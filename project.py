@@ -31,16 +31,17 @@ def zapisz_faktury_do_pliku(kwota, data, waluta):
 
 # Zapis danych platnosci w plik platnosci.txt
 def zapisz_platnosc_do_pliku(kwota, data, waluta):
-    faktura = {
+    platnosc = {
         "Kwota": kwota,
         "Data_platnosci": data,
         "Waluta": waluta
     }
     
     with open("dane/platnosci.txt", "a") as plik:
-        json.dump(faktura, plik)
+        json.dump(platnosc, plik)
         plik.write('\n')
 
+# Pobiera kurs waluty metoda "GET" z NBP API
 def pobierz_kurs_waluty(kod_waluty, data):
     url = 'http://api.nbp.pl/api/exchangerates/rates/a/%7Bkod_waluty%7D/%7Bdata%7D/?format=json'
     response = requests.get(url)
@@ -55,6 +56,28 @@ def pobierz_kurs_waluty(kod_waluty, data):
 
     return None
 
+# Zapis danych platnosci w plik platnosci.txt
+def zapisz_wynik_platnosci_do_pliku(wynik, ostatek):
+    wynik_platnosci = {
+        "Wynik_platnosci": wynik,
+        "Ostatek": ostatek
+    }
+    
+    with open("dane/wynik_platnosci.txt", "a") as plik:
+        json.dump(wynik_platnosci, plik)
+        plik.write('\n')
+
+# Oblicz roznice kwoty faktury i kwoty platnosci
+def oblicz_roznice(kwota_faktury, kwota_platnosci):
+    roznica = kwota_faktury - kwota_platnosci
+
+    if roznica == 0:
+        return "Paid", roznica
+    elif roznica > 0:
+        return "Overpaid", roznica
+    else:
+        return "Underpaid", roznica
+
 def main():
     kwota_faktury, data_faktury, kod_waluty_faktury = wprowadz_dane_faktury()
     kwota_platnosci, data_platnosci, kod_waluty_platnosci = wprowadz_dane_platnosci()
@@ -62,9 +85,14 @@ def main():
     zapisz_faktury_do_pliku(kwota_faktury, data_faktury, kod_waluty_faktury)
     zapisz_platnosc_do_pliku(kwota_platnosci, data_platnosci, kod_waluty_platnosci)
         
-    pobierz_kurs_waluty(kod_waluty_faktury, data_faktury)
+    kurs_waluty_faktury = pobierz_kurs_waluty(kod_waluty_faktury, data_faktury)
+    kurs_waluty_platnosci = pobierz_kurs_waluty(kod_waluty_platnosci, data_platnosci)
+
+    if kurs_waluty_faktury is not None and kurs_waluty_platnosci is not None:
+        wynik, roznica = oblicz_roznice(kwota_faktury*kurs_waluty_faktury, kwota_platnosci*kurs_waluty_platnosci)
+        zapisz_wynik_platnosci_do_pliku(wynik, roznica)
+    else:
+        print("Error appeared, kurs_waluty_faktury or kurs_waluty_platnosci is None")
 
 if __name__ == "__main__":
     main()
-
-

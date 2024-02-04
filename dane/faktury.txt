@@ -1,4 +1,0 @@
-{"Kwota": 2.0, "Data_faktury": "2", "Waluta": "2"}
-{"Kwota": 3.0, "Data_faktury": "3", "Waluta": "3"}
-{"Kwota": 500.0, "Data_faktury": "2024-02-03", "Waluta": "USD"}
-{"Kwota": 500.0, "Data_faktury": "2024-02-21", "Waluta": "USD"}

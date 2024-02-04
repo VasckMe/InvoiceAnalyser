@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 /dane/faktury.txt
 /dane/platnosci.txt
+/dane/wynik_platnosci.txt
