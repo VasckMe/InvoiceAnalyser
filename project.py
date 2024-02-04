@@ -1,4 +1,5 @@
 import json
+from pip._vendor import requests
 
 # Wprowadzenie użytkownikiem danych faktur
 def wprowadz_dane_faktury():
@@ -17,7 +18,7 @@ def wprowadz_dane_platnosci():
     return kwota, data_platnosci, waluta
 
 # Zapis danych faktur w plik faktury.txt
-def zapisz_faktury(kwota, data, waluta):
+def zapisz_faktury_do_pliku(kwota, data, waluta):
     faktura = {
         "Kwota": kwota,
         "Data_faktury": data,
@@ -29,7 +30,7 @@ def zapisz_faktury(kwota, data, waluta):
         plik.write('\n')
 
 # Zapis danych platnosci w plik platnosci.txt
-def zapisz_platnosc(kwota, data, waluta):
+def zapisz_platnosc_do_pliku(kwota, data, waluta):
     faktura = {
         "Kwota": kwota,
         "Data_platnosci": data,
@@ -40,14 +41,30 @@ def zapisz_platnosc(kwota, data, waluta):
         json.dump(faktura, plik)
         plik.write('\n')
 
+def pobierz_kurs_waluty(kod_waluty, data):
+    url = 'http://api.nbp.pl/api/exchangerates/rates/a/%7Bkod_waluty%7D/%7Bdata%7D/?format=json'
+    response = requests.get(url)
+    match response.status_code:
+        case 200:
+            kurs_waluty = response.json()['rates'][0]['mid']
+            return kurs_waluty
+        case 404:
+            print(f'404 Błąd podczas pobierania kursu dla {kod_waluty} na dzień {data}')
+        case _:
+            print(f'{response.status_code} Błąd podczas pobierania kursu dla {kod_waluty} na dzień {data}')
+
+    return None
+
 def main():
-    kwota_faktury, data_faktury, waluta_faktury = wprowadz_dane_faktury()
-    kwota_platnosci, data_platnosci, waluta_platnosci = wprowadz_dane_platnosci()
-    # validate data
-    zapisz_faktury(kwota_faktury, data_faktury, waluta_faktury)
-    zapisz_platnosc(kwota_platnosci, data_platnosci, waluta_platnosci)
-    print(kwota_faktury, data_faktury, waluta_faktury)
-    print(kwota_platnosci, data_platnosci, waluta_platnosci)
+    kwota_faktury, data_faktury, kod_waluty_faktury = wprowadz_dane_faktury()
+    kwota_platnosci, data_platnosci, kod_waluty_platnosci = wprowadz_dane_platnosci()
+
+    zapisz_faktury_do_pliku(kwota_faktury, data_faktury, kod_waluty_faktury)
+    zapisz_platnosc_do_pliku(kwota_platnosci, data_platnosci, kod_waluty_platnosci)
         
+    pobierz_kurs_waluty(kod_waluty_faktury, data_faktury)
+
 if __name__ == "__main__":
     main()
+
+
