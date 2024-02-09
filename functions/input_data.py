@@ -31,12 +31,12 @@ def wprowadz_dane_faktury():
         print("Nieprawidlowy format kwoty")
         spoboj_ponownie("Chcesz kontynuowac ponownie? TAK/NIE", wprowadz_dane_faktury)
 
-    data = input("Podaj datę płatności (RRRR-MM-DD): ")
+    data = input("Podaj datę faktury (RRRR-MM-DD): ")
 
     if not is_valid_date(data):
         print("Nieprawidlowy format daty")
         spoboj_ponownie("Chcesz kontynuowac ponownie? TAK/NIE", wprowadz_dane_faktury)
 
-    waluta = input("Podaj walutę: ").upper()
+    waluta = input("Podaj walutę faktury: ").upper()
 
     return kwota_float, data, waluta

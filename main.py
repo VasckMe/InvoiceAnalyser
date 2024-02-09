@@ -4,6 +4,7 @@ from functions.calculate_data import oblicz_roznice
 from functions.addictive_functions import spoboj_ponownie
 from functions.requests import pobierz_kurs_waluty
 
+# Main funkcja
 def main():
     # Wprowadzenie danych
     kwota_faktury, data_faktury, kod_waluty_faktury = wprowadz_dane_faktury()
