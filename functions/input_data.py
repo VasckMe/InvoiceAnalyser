@@ -1,4 +1,4 @@
-from functions.verification import is_valid_date, is_float
+from functions.verify_data import is_valid_date, is_float
 from functions.addictive_functions import spoboj_ponownie
 
 # Wprowadzenie użytkownikiem danych platnosci faktury

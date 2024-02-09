@@ -25,9 +25,9 @@ def zapisz_platnosc_do_pliku(kwota, data, waluta):
         plik.write('\n')
 
 # Zapis danych platnosci w plik platnosci.txt
-def zapisz_wynik_platnosci_do_pliku(wynik, ostatek):
+def zapisz_wynik_platnosci_do_pliku(wynik_string, ostatek):
     wynik_platnosci = {
-        "Wynik_platnosci": wynik,
+        "Wynik_platnosci": wynik_string,
         "Ostatek": ostatek
     }
     
